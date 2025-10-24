@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: sports_events_calender_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: sports
+      POSTGRES_PASSWORD: radar
+      POSTGRES_DB: sports_events_calender
+      TZ: Europe/Vienna
+    ports:
+      - "5432:5432"
+    volumes:
+      # Mount of database SQL folder to allow Docker to run db setup
+      - ./database:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sports -d sports_events_calender"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
