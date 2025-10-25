@@ -29,7 +29,7 @@ const InvalidPage = ({
   const getColor = (count) => {
     if (count <= 5) return "text-red-500";
     if (count <= 10) return "text-yellow-500";
-    return "text-secondary";
+    return "text-blue-600";
   };
 
   // Full override mode
@@ -53,7 +53,7 @@ const InvalidPage = ({
 
       <button
         onClick={() => setRedirect(true)}
-        className="cursor-pointer text-secondary underline hover:text-blue-800 focus:outline-none"
+        className="cursor-pointer text-blue-600 underline hover:text-blue-800 focus:outline-none"
       >
         {buttonText}
       </button>

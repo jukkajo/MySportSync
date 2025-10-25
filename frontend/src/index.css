@@ -4,7 +4,7 @@
 @layer base {
   :root {
     --color-primary: #0D1A30;
-    --color-secondary: #3b82f6;
+    --color-secondary: #1F344C;
   }
   @media (prefers-color-scheme: dark) {
     :root {
@@ -17,6 +17,9 @@
 @layer utilities {
   .bg-primary {
     background-color: var(--color-primary);
+  }
+  .bg-secondary {
+    background-color: var(--color-secondary);
   }
   .text-primary {
     color: var(--color-primary);
