@@ -31,8 +31,8 @@ const HomePageHeader = () => {
     transition={{ duration: 0.6, ease: "easeOut" }} // Transition animation
   >
    <div className="flex items-center justify-between px-8 
-                   bg-gradient-to-r from-[#0d1a30cc] via-[#243b55cc] to-[#141e30cc]
-                   backdrop-blur-xl border-b border-white/10 shadow-[0_8px_20px_rgba(13,26,48,0.6)]">
+                   bg-transparent
+                   border-b border-white/10 shadow-[0_8px_20px_rgba(13,26,48,0.6)]">
         
     <div onClick={() => navigate("/")} className="flex cursor-pointer pl-4 py-2 items-center justify-center space-x-3">
       <img className="w-18 h-18" alt="Logo" src={logo} />

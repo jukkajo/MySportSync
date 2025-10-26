@@ -4,6 +4,7 @@ CREATE TABLE events (
   home_team_id INTEGER,
   opponent_team_id INTEGER,
   event_start TIMESTAMP WITH TIME ZONE, -- Used to derive date, weekday and time
+  planned_duration INTERVAL DEFAULT INTERVAL '90 minutes', -- Used to determine which event is considered live
   event_place VARCHAR(128), -- Tells where event is held
   event_timezone VARCHAR(64) NOT NULL DEFAULT 'Europe/Vienna',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

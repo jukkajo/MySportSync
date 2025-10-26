@@ -8,12 +8,12 @@ const SportTypeSelect = ({ selectedSport = "", sports = [], onSelect }) => {
         <select
           value={selectedSport}
           onChange={(e) => onSelect(e.target.value)}
-          className="p-2 rounded-lg border border-gray-300 w-full"
+          className="p-2 rounded-lg border border-gray-300 w-full text-gray-900 bg-white"
         >
           <option value="">All Sports</option>
           {sports.map(({ name, id }) => (
             <option key={id} value={name}>
-              {name}
+              {name.charAt(0).toUpperCase() + name.slice(1)}
             </option>
           ))}
         </select>
