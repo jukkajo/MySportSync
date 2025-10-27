@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 const SportTypeSelect = ({ selectedSport = "", sports = [], onSelect }) => {
   return (
     <motion.div transition={{ duration: 0.2 }}>
-      <label className="block font-semibold text-gray-700 mb-1">Sport</label>
+      <label className="text-sm block font-semibold text-gray-700 mb-1">Sport</label>
       {sports.length > 0 ? (
         <select
           value={selectedSport}

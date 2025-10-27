@@ -1,6 +1,5 @@
 import { createEventController } from "../controllers/createEventController.js";
 import { getEventsController } from "../controllers/getEventsController.js";
-import { getEventByIdController } from "../controllers/getEventByIdController.js";
 import { getSystemSportTypesController } from "../controllers/getSystemSportTypesController.js";
 
 export default async function eventRoutes(fastify, options) {
@@ -18,14 +17,6 @@ export default async function eventRoutes(fastify, options) {
     method: 'GET',
     url: '/get-events',
     handler: getEventsController,
-  });
-  
-  // Fetch single event
-  // Expects param: id, (number) 
-  fastify.route({
-    method: "GET",
-    url: "/event",
-    handler: getEventByIdController,
   });
   
   // Get all available/allowed sport types

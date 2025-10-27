@@ -12,6 +12,9 @@ fastify.get('/', async (req, reply) => {
 import eventsRoutes from './routes/eventRoutes.js';
 fastify.register(eventsRoutes, { prefix: '/api/events' });
 
+import teamRoutes from './routes/teamsRoutes.js';
+fastify.register(teamRoutes, { prefix: '/api/teams' });
+
 // Starting server
 const start = async () => {
   try {

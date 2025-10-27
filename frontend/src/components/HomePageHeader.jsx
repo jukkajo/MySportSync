@@ -11,8 +11,8 @@ const HomePageHeader = () => {
   		{name: "All Events", id: "events"},
 		{name: "All Teams", id: "teams" },
 		{name: "About", id: "about"},
-		{name: "Register", id: "register"},
-		{name: "Login", id: "login"}];
+		{name: "Register Team", id: "register"},
+		{name: "Log Out", id: "logout"}];
 		
   const handleNavigateClick = (path) => {
     let route ;

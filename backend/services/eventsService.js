@@ -34,3 +34,53 @@ export async function getCurrentAndUpcomingEvents(limit = 15) {
     client.release();
   }
 }
+
+// Save new sport event into database
+export async function saveEvent({
+  sport,
+  homeTeamId,
+  opponentTeamId,
+  event_start,
+  event_place,
+  planned_duration,
+  description,
+}) {
+  const client = await fastify.pg.connect();
+  try {
+    const query = `
+      INSERT INTO events (
+        home_team_id,
+        opponent_team_id,
+        event_start,
+        planned_duration,
+        event_place,
+        event_timezone,
+        created_at,
+        updated_at
+      )
+      VALUES ($1, $2, $3, $4, $5, 'Europe/Vienna', NOW(), NOW())
+      RETURNING id, home_team_id, opponent_team_id, event_start, planned_duration, event_place,
+      (SELECT team_name FROM teams WHERE id = $1) AS home_team_name,
+      (SELECT team_name FROM teams WHERE id = $2) AS opponent_team_name,
+      $6 AS sport,
+      event_start + planned_duration AS event_end;
+    `;
+
+    const values = [
+      homeTeamId,
+      opponentTeamId,
+      event_start,
+      planned_duration,
+      event_place,
+      sport, // To be injected in return object
+    ];
+
+    const { rows } = await client.query(query, values);
+    return rows[0];
+  } catch (err) {
+    console.error("Error saving event:", err);
+    throw new Error("Database insert failed.");
+  } finally {
+    client.release();
+  }
+}

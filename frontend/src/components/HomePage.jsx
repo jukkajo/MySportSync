@@ -1,10 +1,12 @@
-import React from "react";
+import React, {useState} from "react";
 import HomePageHeader from "./HomePageHeader";
 import AddNewEventFrom from "./AddNewEventForm";
 import EventDisplay from "./EventDisplay";
 import HomePageFooter from "./HomePageFooter";
 
 const HomePage = () => {
+  const [sortedEvents, setSortedEvents] = useState([]);
+    
   return (
     <div className="min-h-screen flex flex-col bg-primary"
          style={{
@@ -20,8 +22,8 @@ const HomePage = () => {
       {/* Center area */}
       <div className="flex-1 flex flex-col items-center justify-center px-6 py-4">
         <div className="flex items-center justify-center space-x-15 w-full h-full">
-          <EventDisplay events={[]} />
-          <AddNewEventFrom />
+          <EventDisplay sortedEvents={sortedEvents} setSortedEvents={setSortedEvents} />
+          <AddNewEventFrom setSortedEvents={setSortedEvents} />
         </div>
       </div>
 

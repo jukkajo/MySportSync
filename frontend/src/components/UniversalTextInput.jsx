@@ -11,7 +11,7 @@ const UniversalTextInput = ({
 
   return (
     <div className="flex flex-col space-y-1 w-full">
-      <label className="font-semibold text-gray-700">{label}</label>
+      <label className="font-semibold text-sm text-gray-700">{label}</label>
       <input
         type="text"
         value={value}
@@ -20,7 +20,7 @@ const UniversalTextInput = ({
         }
         placeholder={placeholder}
         className=" placeholder:text-gray-300 placeholder:text-sm
-                    p-2 rounded-lg text-black border border-gray-300"
+                    p-1 rounded-lg text-black border border-gray-300"
       />
       <p
         className={`text-xs text-right ${

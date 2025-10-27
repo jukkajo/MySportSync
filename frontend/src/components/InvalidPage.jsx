@@ -53,7 +53,7 @@ const InvalidPage = ({
 
       <button
         onClick={() => setRedirect(true)}
-        className="cursor-pointer text-blue-600 underline hover:text-blue-800 focus:outline-none"
+        className="cursor-pointer text-green-400 underline hover:text-green-600 focus:outline-none"
       >
         {buttonText}
       </button>
