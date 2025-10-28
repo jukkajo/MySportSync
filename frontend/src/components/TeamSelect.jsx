@@ -32,7 +32,7 @@ const TeamSelect = ({ teams, setTeams, label, selectedTeam, onSelect }) => {
   
   return (
     <div className="flex flex-col relative">
-      <label className="text-gray-700 font-semibold mb-1">{label}</label>
+      <label className="text-gray-700 text-sm font-semibold mb-1">{label}</label>
       <input
         type="text"
         value={query}

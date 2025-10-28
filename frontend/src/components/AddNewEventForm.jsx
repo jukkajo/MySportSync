@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { CalendarPlus } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { CalendarPlus, ArrowLeft } from "lucide-react";
 
 import UniversalTextInput from "./UniversalTextInput";
 import TimeZoneSelect from "./TimeZoneSelect";
@@ -201,46 +201,78 @@ const AddNewEventForm = ( { setSortedEvents } ) => {
        <CalendarPlus className="w-7 h-7 mb-3 text-white" />
       </div>
       
-     <div className="flex flex-col border border-gray-200 text-lg font-semibold text-black rounded-xl bg-white py-6 px-8 max-w-xl mx-auto space-y-2">
-       <SportTypeSelect selectedSport={sport} sports={availableSports} onSelect={handleSportTypeSelect} />
-       <TeamSelect teams={teams} setTeams={setTeams} label="Home Team" selectedTeam={homeTeamId} onSelect={handleHomeTeamSelect} />
-       <TeamSelect teams={teams} setTeams={setTeams} label="Opponent Team" selectedTeam={opponentTeamId} onSelect={handleOpponentTeamSelect} />
+     <div className="flex min-h-2xl flex-col border border-gray-200 text-lg font-semibold text-black rounded-xl bg-white py-6 px-8 max-w-xl mx-auto space-y-2">
+     
+     <AnimatePresence mode="wait">
+       {view === "main" &&
+         <motion.div
+           key="main"
+           initial={{ opacity: 0, x: -50 }}
+           animate={{ opacity: 1, x: 0 }}
+           exit={{ opacity: 0 }}
+           className="space-y-2"
+         >
+           <h3>Set Details</h3>
+           <SportTypeSelect selectedSport={sport} sports={availableSports} onSelect={handleSportTypeSelect} />
+           <TeamSelect teams={teams} setTeams={setTeams} label="Home Team" selectedTeam={homeTeamId} onSelect={handleHomeTeamSelect} />
+           <TeamSelect teams={teams} setTeams={setTeams} label="Opponent Team" selectedTeam={opponentTeamId} onSelect={handleOpponentTeamSelect} />
+           <UniversalTextInput
+             label="Venue"
+             value={venue}
+             onChange={setVenue}
+             maxLength={60}
+             placeholder="Where event is held?"
+           /> 
+           <UniversalTextInput
+             label="Description"
+             value={description}
+             onChange={setDescription}
+             maxLength={200}
+             placeholder="Major details?"
+           />
+         </motion.div>
+       }
 
-      <div className="flex flex-col w-full gap-4">        
-        <div className="flex space-x-4">
-        <div className="flex flex-col">
-          <label className="text-sm text-gray-700 font-semibold mb-1">Date</label>
-          <input
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            className="p-2 rounded-lg border border-gray-300"
-            required
-          />
-        </div>
-        <div className="flex flex-col">
-          <label className="text-sm text-gray-700 font-semibold mb-1 w-25">Time</label>
-          <input
-            type="time"
-            value={time}
-            onChange={(e) => setTime(e.target.value)}
-            className="p-2 rounded-lg border border-gray-300"
-            required
-          />
-        </div>
-        </div>
+       {view === "time" &&
+         <motion.div
+           key="time"
+           initial={{ opacity: 0, x: -50 }}
+           animate={{ opacity: 1, x: 0 }}
+           exit={{ opacity: 0 }}
+           className="space-y-4"
+         >
+          <div className="flex space-x-2 justify-start items-center">
+            <button onClick={() => { setView("main") }} className="cursor-pointer">
+              <ArrowLeft className="w-8 h-8 hover:text-green-400" />
+            </button>
+            <h2>Go Back</h2>
+          </div>
+              
+          <h3>Set Time & Duration</h3>
+          <div className="flex flex-col">
+            <label className="text-sm text-gray-700 font-semibold mb-1">Date</label>
+            <input
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              className="p-2 rounded-lg border border-gray-300"
+              required
+            />
+          </div>
+          <div className="flex flex-col">
+            <label className="text-sm text-gray-700 font-semibold mb-1 w-25">Time</label>
+            <input
+              type="time"
+              value={time}
+              onChange={(e) => setTime(e.target.value)}
+              className="p-2 rounded-lg border border-gray-300"
+              required
+            />
+          </div>
         
         <TimeZoneSelect value={timezone} onChange={setTimezone} />
-      </div>
-
-      <UniversalTextInput
-        label="Venue"
-        value={venue}
-        onChange={setVenue}
-        maxLength={60}
-        placeholder="Where event is held?"
-      />
       
+
       <div className="flex flex-col">
         <label className="text-gray-700 font-semibold mb-1">Planned Duration (minutes)</label>
         <input
@@ -254,25 +286,20 @@ const AddNewEventForm = ( { setSortedEvents } ) => {
           placeholder="e.g. 60"
         />
       </div>
-
-      <UniversalTextInput
-        label="Description"
-        value={description}
-        onChange={setDescription}
-        maxLength={200}
-        placeholder="Major details?"
-      />
-
-      <motion.button
-        onClick={handleSubmit}
-        transition={{ duration: 0.2 }}
-        type="submit"
-        className={`${availableSports.length < 1 ? "cursor-not-allowed bg-gray-300" : "bg-green-600 hover:bg-green-400 cursor-pointer" } mt-4 py-2  text-white font-bold rounded-lg`}
-        disabled={availableSports.length < 1}
-      >
-        Add Event
-      </motion.button>
-    </div>
+         </motion.div>
+       }
+     </AnimatePresence>
+     
+        <motion.button
+          onClick={view === 'main' ? (() => {setView("time")})  : handleSubmit}
+          transition={{ duration: 0.2 }}
+          type="submit"
+          className={`${availableSports.length < 1 ? "cursor-not-allowed bg-gray-300" : "bg-green-600 hover:bg-green-400 cursor-pointer" } mt-4 py-2  text-white font-bold rounded-lg`}
+          disabled={availableSports.length < 1}
+        >
+          {view === 'main' ? "Next" : "Add Event"}
+        </motion.button>
+      </div>
     </motion.div>
   );
 };

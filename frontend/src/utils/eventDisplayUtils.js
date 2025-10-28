@@ -30,7 +30,7 @@ export const sortEvents = (list, option, setSortedEvents) => {
     // Events that are consired live
     case "date-asc-2":
     
-     // Live
+     // Live 
      const liveEvents = list.filter(e => {
        const start = new Date(e.event_start);
        const end = new Date(e.event_end);

@@ -9,7 +9,7 @@ const HomePageFooter = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
    >
-    <footer className="bg-gray-900 border-t border-gray-700 text-white py-12 px-4 sm:px-6 md:px-12 mt-10">
+    <footer className="bg-gray-900 border-t border-gray-700 text-white py-12 px-4 sm:px-6 md:px-12">
       {/* Main wrapper */}
       <div className="flex justify-center">
         <div

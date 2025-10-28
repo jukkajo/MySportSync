@@ -8,6 +8,7 @@ const HomePage = () => {
   const [sortedEvents, setSortedEvents] = useState([]);
     
   return (
+  <div className="flex flex-col">
     <div className="min-h-screen flex flex-col bg-primary"
          style={{
            backgroundImage: "url('/src/assets/wallpaper.png')",
@@ -20,16 +21,16 @@ const HomePage = () => {
       <HomePageHeader />
 
       {/* Center area */}
-      <div className="flex-1 flex flex-col items-center justify-center px-6 py-4">
+      <div className="flex-1 flex flex-col items-start justify-center px-6 py-4">
         <div className="flex items-center justify-center space-x-15 w-full h-full">
           <EventDisplay sortedEvents={sortedEvents} setSortedEvents={setSortedEvents} />
           <AddNewEventFrom setSortedEvents={setSortedEvents} />
         </div>
       </div>
-
-      {/* Footer */}
-      <HomePageFooter />
     </div>
+    {/* Footer */}
+    <HomePageFooter />
+  </div>
   );
 };
 

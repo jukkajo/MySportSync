@@ -19,7 +19,7 @@ const UniversalTextInput = ({
           onChange(e.target.value.slice(0, maxLength))
         }
         placeholder={placeholder}
-        className=" placeholder:text-gray-300 placeholder:text-sm
+        className=" placeholder:text-gray-300 placeholder:text-md
                     p-1 rounded-lg text-black border border-gray-300"
       />
       <p
