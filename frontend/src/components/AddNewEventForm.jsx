@@ -3,13 +3,18 @@ import { motion } from "framer-motion";
 import { CalendarPlus } from "lucide-react";
 
 import UniversalTextInput from "./UniversalTextInput";
-import ShowToast from "./ShowToast";
-import api from "../apis/api.js";
-import logo from "../assets/logo.png";
+import TimeZoneSelect from "./TimeZoneSelect";
 import SportTypeSelect from "./SportTypeSelect";
 import TeamSelect from "./TeamSelect";
+import ShowToast from "./ShowToast";
+
+import api from "../apis/api.js";
+import logo from "../assets/logo.png";
 
 const AddNewEventForm = ( { setSortedEvents } ) => {
+
+  const [view, setView] = useState('main'); // 'main' or 'time' 
+  
   const [teams, setTeams] = useState([]);
   const [availableSports, setAvailableSports] = useState([]); 
   const [sport, setSport] = useState("");
@@ -17,10 +22,13 @@ const AddNewEventForm = ( { setSortedEvents } ) => {
   const [homeTeamId, setHomeTeamId] = useState(null);
   const [opponentTeamId, setOpponentTeamId] = useState("");
 
-  const [date, setDate] = useState("");
   const [venue, setVenue] = useState("");  
+  
   const [plannedDuration, setPlannedDuration] = useState(null); // In minutes
+  const [date, setDate] = useState("");
   const [time, setTime] = useState("");
+  const [timezone, setTimezone] = useState("Europe/Vienna");
+
   const [description, setDescription] = useState("");
 
   // Initial available sport types fetch:
@@ -53,8 +61,6 @@ const AddNewEventForm = ( { setSortedEvents } ) => {
   }
 
   const handleSubmit = async (e) => {
-    console.log(sport,homeTeamId, opponentTeamId, plannedDuration, date,time,venue);
-  
     // Very basic validation for now
     const missingFields = [];
     
@@ -71,6 +77,7 @@ const AddNewEventForm = ( { setSortedEvents } ) => {
     
     if (!sport) missingFields.push("Sport");
     if (!date) missingFields.push("Date");
+    if (!timezone) missingFields.push("Timezone");
     if (!time) missingFields.push("Time");
     if (!venue) missingFields.push("Venue");
     if (!description) missingFields.push("Description");
@@ -97,6 +104,7 @@ const AddNewEventForm = ( { setSortedEvents } ) => {
       venue,
       plannedDuration, 
       description,
+      timezone
     };
     
     try {
@@ -120,6 +128,7 @@ const AddNewEventForm = ( { setSortedEvents } ) => {
         setVenue("");
         setPlannedDuration(null);
         setDescription("");
+        setTimezone("Europe/Vienna");
         
         // EventDisplay expects this structure
 	const latestEvent = {
@@ -130,7 +139,8 @@ const AddNewEventForm = ( { setSortedEvents } ) => {
 	  sport: data.sport,
 	  home_team: data.home_team_name,
 	  opponent_team: data.opponent_team_name,
-	  description: data.desc
+	  description: data.desc,
+	  event_timezone: data.event_timezone
 	};
 
         // Update local state with event
@@ -165,7 +175,6 @@ const AddNewEventForm = ( { setSortedEvents } ) => {
   const handleOpponentTeamSelect = (teamId) => {
     if (homeTeamId !== teamId) { // Can not play against itself
       setOpponentTeamId(teamId);
-      console.log(teamId);
     } else {
       ShowToast({
         image: logo,
@@ -193,13 +202,12 @@ const AddNewEventForm = ( { setSortedEvents } ) => {
       </div>
       
      <div className="flex flex-col border border-gray-200 text-lg font-semibold text-black rounded-xl bg-white py-6 px-8 max-w-xl mx-auto space-y-2">
-     
-      <SportTypeSelect selectedSport={sport} sports={availableSports} onSelect={handleSportTypeSelect} />
+       <SportTypeSelect selectedSport={sport} sports={availableSports} onSelect={handleSportTypeSelect} />
+       <TeamSelect teams={teams} setTeams={setTeams} label="Home Team" selectedTeam={homeTeamId} onSelect={handleHomeTeamSelect} />
+       <TeamSelect teams={teams} setTeams={setTeams} label="Opponent Team" selectedTeam={opponentTeamId} onSelect={handleOpponentTeamSelect} />
 
-     <TeamSelect teams={teams} setTeams={setTeams} label="Home Team" selectedTeam={homeTeamId} onSelect={handleHomeTeamSelect} />
-     <TeamSelect teams={teams} setTeams={setTeams} label="Opponent Team" selectedTeam={opponentTeamId} onSelect={handleOpponentTeamSelect} />
-
-      <div className="flex w-full gap-4">
+      <div className="flex flex-col w-full gap-4">        
+        <div className="flex space-x-4">
         <div className="flex flex-col">
           <label className="text-sm text-gray-700 font-semibold mb-1">Date</label>
           <input
@@ -220,6 +228,9 @@ const AddNewEventForm = ( { setSortedEvents } ) => {
             required
           />
         </div>
+        </div>
+        
+        <TimeZoneSelect value={timezone} onChange={setTimezone} />
       </div>
 
       <UniversalTextInput

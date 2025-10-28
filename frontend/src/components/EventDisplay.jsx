@@ -5,6 +5,8 @@ import { sortEvents, isLive } from "../utils/eventDisplayUtils";
 import logo from "../assets/logo.png";
 import { TrendingUp, ChevronUp, ChevronDown, SortAsc, Info, X, Spotlight } from "lucide-react";
 import api from "../apis/api";
+import { getTimeZoneOffset } from "../utils/timeUtils";
+
 import ShowToast from "../components/ShowToast"; 
 
 const EventDisplay = ({ sortedEvents, setSortedEvents }) => {
@@ -149,7 +151,7 @@ const EventDisplay = ({ sortedEvents, setSortedEvents }) => {
     </div>
 
     {/* Events header */}
-      <div className="grid text-gray-100 grid-cols-[0.6fr_0.6fr_1fr_1.6fr_1.2fr_1.2fr_0.5fr] gap-4 px-4 py-2 border-b border-white/20 font-semibold text-lg">
+      <div className="grid text-gray-100 grid-cols-[0.6fr_1fr_1fr_1.6fr_1.2fr_1.2fr_0.5fr] gap-4 px-4 py-2 border-b border-white/20 font-semibold text-lg">
         <span>Date</span>
         <span>Start</span>
         <span>Sport</span>
@@ -162,8 +164,9 @@ const EventDisplay = ({ sortedEvents, setSortedEvents }) => {
       {/* Events list */}
       {sortedEvents.length > 0 ? (
         sortedEvents.map((event, index) => {
-          console.log("EVNT", event);
           const { date, time } = deriveTimeAndDate(event.event_start);
+          const offset = getTimeZoneOffset(event.event_timezone);
+
           // Format smaller
           const subStrings = date.split('-');
           const minimalDate = subStrings[2] + '.' + subStrings[1];
@@ -178,7 +181,7 @@ const EventDisplay = ({ sortedEvents, setSortedEvents }) => {
 	        duration: 0.6,
 	        delay: index * 0.2, // delay to render with staggered effect
 	      }}
-	      className="text-white cursor-pointer bg-secondary grid grid-cols-[0.6fr_0.6fr_1fr_1.6fr_1.2fr_1.2fr_0.5fr] mt-1 gap-4 px-4 py-3 hover:bg-white/20 transition-all duration-200 rounded-lg overflow-hidden"
+	      className="text-white cursor-pointer bg-secondary grid grid-cols-[0.6fr_1fr_1fr_1.6fr_1.2fr_1.2fr_0.5fr] mt-1 gap-4 px-4 py-3 hover:bg-white/20 transition-all duration-200 rounded-lg overflow-hidden"
 	    >
 
 	      <span className="flex items-center">
@@ -197,7 +200,7 @@ const EventDisplay = ({ sortedEvents, setSortedEvents }) => {
 	        ) : <div className="w-2.5 h-2.5 mr-2" /> }
 	        {minimalDate}
 	      </span>
-  	      <span>{time}</span>
+  	      <span className="flex">{time}{" "}({offset})</span>
 	      <span className="truncate max-w-[8rem]" title={event.sport}>{event.sport.charAt(0).toUpperCase() + event.sport.slice(1)}</span>
 	      <span className="truncate max-w-[12rem]" title={event.event_place}>
 	        {event.event_place}

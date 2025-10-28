@@ -13,6 +13,7 @@ export async function getCurrentAndUpcomingEvents(limit = 15) {
         e.event_start,
         e.event_start + e.planned_duration AS event_end,
         e.event_place,
+        e.event_timezone,
         e.description,
         CASE
           WHEN e.event_start <= NOW() AND e.event_start + e.planned_duration > NOW() THEN 'live'
@@ -45,6 +46,7 @@ export async function saveEvent({
   event_place,
   planned_duration,
   description,
+  timezone
 }) {
   const client = await fastify.pg.connect();
   try {
@@ -60,12 +62,12 @@ export async function saveEvent({
         created_at,
         updated_at
       )
-      VALUES ($1, $2, $3, $4, $5, 'Europe/Vienna', $6, NOW(), NOW())
-      RETURNING id, home_team_id, opponent_team_id, event_start, planned_duration, event_place,
+      VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), NOW())
+      RETURNING id, home_team_id, opponent_team_id, event_start, planned_duration, event_place, event_timezone,
       (SELECT team_name FROM teams WHERE id = $1) AS home_team_name,
       (SELECT team_name FROM teams WHERE id = $2) AS opponent_team_name,
-      $6 AS desc,
-      $7 AS sport,
+      $7 AS desc,
+      $8 AS sport,
       event_start + planned_duration AS event_end;
     `;
 
@@ -75,6 +77,7 @@ export async function saveEvent({
       event_start,
       planned_duration,
       event_place,
+      timezone,
       description,
       sport // To be injected in return object
     ];

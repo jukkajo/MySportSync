@@ -2,10 +2,10 @@ import { saveEvent } from "../services/eventsService.js";
 
 export async function createEventController(request, reply) {
   try {
-    const { sport, homeTeamId, opponentTeamId, date, time, venue, description, plannedDuration } = request.body;
+    const { sport, homeTeamId, opponentTeamId, date, time, venue, description, plannedDuration, timezone } = request.body;
 
     // Very basic validation
-    if (!sport || !homeTeamId || !opponentTeamId || !date || !time || !venue || !description || !plannedDuration) {
+    if (!sport || !homeTeamId || !opponentTeamId || !date || !time || !venue || !description || !plannedDuration || !timezone) {
       return reply.status(400).send({ error: "Missing required fields." });
     }
 
@@ -24,6 +24,7 @@ export async function createEventController(request, reply) {
       event_place: venue,
       planned_duration: durationInterval,
       description,
+      timezone
     };
 
     // Save event
