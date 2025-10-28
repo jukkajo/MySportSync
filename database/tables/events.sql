@@ -7,6 +7,7 @@ CREATE TABLE events (
   planned_duration INTERVAL DEFAULT INTERVAL '90 minutes', -- Used to determine which event is considered live
   event_place VARCHAR(128), -- Tells where event is held
   event_timezone VARCHAR(64) NOT NULL DEFAULT 'Europe/Vienna',
+  description VARCHAR(200), -- Option desc. about event
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP  DEFAULT CURRENT_TIMESTAMP,
   

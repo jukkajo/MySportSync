@@ -10,11 +10,13 @@ import SportTypeSelect from "./SportTypeSelect";
 import TeamSelect from "./TeamSelect";
 
 const AddNewEventForm = ( { setSortedEvents } ) => {
+  const [teams, setTeams] = useState([]);
   const [availableSports, setAvailableSports] = useState([]); 
-  
   const [sport, setSport] = useState("");
+  
   const [homeTeamId, setHomeTeamId] = useState(null);
   const [opponentTeamId, setOpponentTeamId] = useState("");
+
   const [date, setDate] = useState("");
   const [venue, setVenue] = useState("");  
   const [plannedDuration, setPlannedDuration] = useState(null); // In minutes
@@ -37,14 +39,37 @@ const AddNewEventForm = ( { setSortedEvents } ) => {
      }
     fetchSports();
     }, []);
+    
+  const returnTeamSelectIssueDesc = (homeTeamId, opponentTeamId) => {
+    let issue = "";
+    if (!homeTeamId && !opponentTeamId) {
+      issue = "Home & Opponent teams are not valid.";
+    } else if (!homeTeamId) {
+      issue = "Home team is not valid.";
+    } else {
+      issue = "Opponent team is not valid.";
+    }
+    return issue;
+  }
 
   const handleSubmit = async (e) => {
     console.log(sport,homeTeamId, opponentTeamId, plannedDuration, date,time,venue);
+  
     // Very basic validation for now
     const missingFields = [];
+    
+    if (!homeTeamId || !opponentTeamId) {
+     const issue = returnTeamSelectIssueDesc(homeTeamId, opponentTeamId);
+     ShowToast({
+        image: logo,
+        title: "Invalid Team Selection",
+        subtitle: `${issue} Please select a registered team from the list.`,
+        options: { toastId: "invalidTeamSelection" },
+      });
+      return;
+    }
+    
     if (!sport) missingFields.push("Sport");
-    if (!homeTeamId) missingFields.push("Home Team");
-    if (!opponentTeamId) missingFields.push("Opponent Team");
     if (!date) missingFields.push("Date");
     if (!time) missingFields.push("Time");
     if (!venue) missingFields.push("Venue");
@@ -105,6 +130,7 @@ const AddNewEventForm = ( { setSortedEvents } ) => {
 	  sport: data.sport,
 	  home_team: data.home_team_name,
 	  opponent_team: data.opponent_team_name,
+	  description: data.desc
 	};
 
         // Update local state with event
@@ -170,8 +196,8 @@ const AddNewEventForm = ( { setSortedEvents } ) => {
      
       <SportTypeSelect selectedSport={sport} sports={availableSports} onSelect={handleSportTypeSelect} />
 
-     <TeamSelect label="Home Team" selectedTeam={homeTeamId} onSelect={handleHomeTeamSelect} />
-     <TeamSelect label="Opponent Team" selectedTeam={opponentTeamId} onSelect={handleOpponentTeamSelect} />
+     <TeamSelect teams={teams} setTeams={setTeams} label="Home Team" selectedTeam={homeTeamId} onSelect={handleHomeTeamSelect} />
+     <TeamSelect teams={teams} setTeams={setTeams} label="Opponent Team" selectedTeam={opponentTeamId} onSelect={handleOpponentTeamSelect} />
 
       <div className="flex w-full gap-4">
         <div className="flex flex-col">

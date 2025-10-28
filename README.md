@@ -1,12 +1,24 @@
-
 # MySportSync
 
-This is basic app to save and display multiple sports events that are held between two teams. App supports various sport types and it allows you to save teams playing, set place of event and decide starting time and date.
+![Screenshot of UI](./ui.png)
 
-**App has:**
+This is lighweight web-app to save and display multiple sports events that are held between two teams. It supports various sport types, allows adding teams, selecting venues, and scheduling event date and time. Built as a demo for a developer job application. Future improvements may include user authentication, token-protected data transmission, role-based permissions, and UI-wise mobile optimization.
+
+**Tech Stack:**
 - PostgreSQL database
 - Node.js / Fastify backend-server
 - Javascript / React client 
+
+**Assumptions and Development Decisions:**
+- The app focuses on listing sports events with essential info: real-time updates or live game tracking may be integrated later
+- The current home page represents the view shown after a succesful (future) user login**.
+- Authentication is not yet implemented, but the client and backend structures ate prepared for adding auth later.
+- The project uses a clean, scalable architecture for smooth transition to production (modular backend with clear task-division, component-based frontend).
+- Home page provides a quick overview of live and upcoming events, sided with an easy event creation form, using existing registered teams.
+- Basic form validation is implemented as a foundation, intended to be expanded later.
+- Dynamic REST-based team search is used instead of a long dropdown for better UX.
+- Events store the timezone in the database to ensure clarity, but no automatic timezone conversion is applied on the UI to avoid issues with VPN and privacy-related location requests.
+- Event-live marker is shown respect to time of event-location.
 
 ## Steps to run:
 
@@ -15,6 +27,7 @@ Run at project root:
 ```
 sudo docker compose up -d
 ```
+
 ### 2. Backend-Server: Install Dependencies, Set Environment & Start
 First, navigate to directory **/backend**.
 Then, create **.env** file and add:

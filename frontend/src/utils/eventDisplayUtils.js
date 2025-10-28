@@ -7,6 +7,7 @@ export const isLive = (event) => {
 
 // Aplies filters and modifies event list
 export const sortEvents = (list, option, setSortedEvents) => {
+  console.log("LST:", list);
   const sorted = [...list];
  
   switch (option) {

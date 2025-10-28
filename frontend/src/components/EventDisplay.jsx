@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { deriveTimeAndDate } from "../utils/timeUtils";
 import { sortEvents, isLive } from "../utils/eventDisplayUtils";
 import logo from "../assets/logo.png";
-import { TrendingUp, ChevronUp, ChevronDown, SortAsc } from "lucide-react";
+import { TrendingUp, ChevronUp, ChevronDown, SortAsc, Info, X, Spotlight } from "lucide-react";
 import api from "../apis/api";
 import ShowToast from "../components/ShowToast"; 
 
@@ -17,6 +17,7 @@ const EventDisplay = ({ sortedEvents, setSortedEvents }) => {
     { key: "sportname-desc", label: "Sport Desc." },
   ];
 
+  const [selectedEvent, setSelectedEvent] = useState(null); 
   const [sortOption, setSortOption] = useState("date-asc");
   const [showSortOptions, setShowSortOptions] = useState(false);
   const [events, setEvents] = useState([]);
@@ -81,6 +82,7 @@ const EventDisplay = ({ sortedEvents, setSortedEvents }) => {
   }, [events, sortOption]);
 
   return (
+  <>
   <motion.div
     initial={{ opacity: 0, y: 50 }}
     animate={{ opacity: 1, y:0 }}
@@ -147,7 +149,7 @@ const EventDisplay = ({ sortedEvents, setSortedEvents }) => {
     </div>
 
     {/* Events header */}
-      <div className="grid text-gray-100 grid-cols-[0.75fr_0.4fr_0.9fr_1.4fr_1.3fr_1.3fr_0.5fr] gap-4 px-4 py-2 border-b border-white/20 font-semibold text-lg">
+      <div className="grid text-gray-100 grid-cols-[0.6fr_0.6fr_1fr_1.6fr_1.2fr_1.2fr_0.5fr] gap-4 px-4 py-2 border-b border-white/20 font-semibold text-lg">
         <span>Date</span>
         <span>Start</span>
         <span>Sport</span>
@@ -176,7 +178,7 @@ const EventDisplay = ({ sortedEvents, setSortedEvents }) => {
 	        duration: 0.6,
 	        delay: index * 0.2, // delay to render with staggered effect
 	      }}
-	      className="text-white cursor-pointer bg-secondary grid grid-cols-[0.5fr_0.5fr_1fr_1.4fr_1.3fr_1.3fr] mt-1 gap-4 px-4 py-3 hover:bg-white/20 transition-all duration-200 rounded-lg overflow-hidden"
+	      className="text-white cursor-pointer bg-secondary grid grid-cols-[0.6fr_0.6fr_1fr_1.6fr_1.2fr_1.2fr_0.5fr] mt-1 gap-4 px-4 py-3 hover:bg-white/20 transition-all duration-200 rounded-lg overflow-hidden"
 	    >
 
 	      <span className="flex items-center">
@@ -202,6 +204,13 @@ const EventDisplay = ({ sortedEvents, setSortedEvents }) => {
 	      </span>
 	      <span>{event.home_team}</span>
 	      <span>{event.opponent_team}</span>
+	      <span>
+	        <button
+	          onClick={() => setSelectedEvent(event)}
+	          className="ml-2 cursor-pointer">
+	          <Info className="hover:text-green-300 w-5 h-5" />
+	        </button>
+	      </span>
 	    </motion.div>
           );
         })
@@ -212,6 +221,42 @@ const EventDisplay = ({ sortedEvents, setSortedEvents }) => {
       )}
     </div>
   </motion.div>
+  
+  {/* Description pop-up */}
+  <AnimatePresence>
+      {selectedEvent && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 flex w-full items-center justify-center bg-black/50 backdrop-blur-sm z-50"
+          onClick={() => setSelectedEvent(null)}
+        >
+          <motion.div
+            initial={{ scale: 0.8 }}
+            animate={{ scale: 1 }}
+            exit={{ scale: 0.8 }}
+            onClick={(e) => e.stopPropagation()}
+            className="bg-secondary rounded-lg p-6 w-96 shadow-xl"
+          >
+            <div className="flex justify-between items-center mb-3">
+              <div className="flex space-x-1 items-center">
+                <h2 className="text-white text-xl font-bold">Event Info</h2>
+                <Spotlight className="text-blue-400 w-6 h-6" />
+              </div>
+              <button onClick={() => setSelectedEvent(null)}>
+                <X className="text-white w-6 h-6 cursor-pointer hover:text-red-500" />
+              </button>
+            </div>
+
+            <p className="p-4 bg-green-50 rounded-xl border border-blue-400 text-gray-900 whitespace-pre-line">
+              {selectedEvent.description || "No description provided."}
+            </p>
+          </motion.div>
+        </motion.div>
+      )}
+  </AnimatePresence>
+  </>
   );
 }
 
