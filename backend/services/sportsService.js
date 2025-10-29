@@ -1,7 +1,7 @@
 import fastify from "../fastify.js";
 
 // Get allowed sports of platform
-export async function getSystemSportTypesAndTeams() {
+export async function getSystemSportTypes() {
   const client = await fastify.pg.connect();
   try {
     const { rows } = await client.query(`SELECT s.id, s.name, t.team FROM sports s;`); 
