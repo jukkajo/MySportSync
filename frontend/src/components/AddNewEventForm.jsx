@@ -9,6 +9,8 @@ import TeamSelect from "./TeamSelect";
 import ShowToast from "./ShowToast";
 
 import { dateTimeToUTCRelativeToTz } from "../utils/timeUtils";
+import { validateEventForm } from "../utils/addNewEventFormUtils";
+
 import api from "../apis/api.js";
 import logo from "../assets/logo.png";
 
@@ -64,53 +66,20 @@ const AddNewEventForm = ( { setSortedEvents } ) => {
   }
 
   const handleSubmit = async (e) => {
-    // Very basic validation for now
-    const missingFields = [];
-    if (!sport) missingFields.push("Sport");
-    if (!date) missingFields.push("Date");
-    if (!timezone) missingFields.push("Timezone");
-    if (!time) missingFields.push("Time");
-    if (!venue) missingFields.push("Venue");
-    if (!description) missingFields.push("Description");
-    if (!plannedDuration) missingFields.push("Planned Duration");
-    if (missingFields.length > 0) {
-      const missingList = missingFields.join(", ");
+  
+    // Validate user inputs
+    const result = validateEventForm({ sport, date, time, timezone, venue, description,
+    plannedDuration, homeTeamId, opponentTeamId});
+    if (!result.valid) {
       ShowToast({
-        image: logo,
-        title: "Missing Required Fields",
-        subtitle: `Please fill: ${missingList}.`,
-        options: { toastId: "validationError" },
+       image: logo,
+       title: result.errorTitle,
+       subtitle: result.errorMessage,
+       options: { toastId: "validationError" },
       });
       return;
     }
-
-    // --- Timezone relative valid time check: ---
-    // Is start time considered past in event tz?
-    const dateTimeString = `${date}T${time}:00`;
-    const eventStartUTC = dateTimeToUTCRelativeToTz(dateTimeString, timezone); 
-    const timeNowAsUTC = Date.now();
-    if (timeNowAsUTC > eventStartUTC) {
-      ShowToast({
-        image: logo,
-        title: "Invalid Event Time",
-        subtitle: "Please choose non-past time/date.",
-        options: { toastId: "validationError" },
-      });
-      return;
-    }
-    // ------------------------------------------
     
-    if (!homeTeamId || !opponentTeamId) {
-     const issue = returnTeamSelectIssueDesc(homeTeamId, opponentTeamId);
-     ShowToast({
-        image: logo,
-        title: "Invalid Team Selection",
-        subtitle: `${issue} Please select a registered team from the list.`,
-        options: { toastId: "invalidTeamSelection" },
-      });
-      return;
-    }
- 
     e.preventDefault();
     const payload = {
       sport,
@@ -126,8 +95,7 @@ const AddNewEventForm = ( { setSortedEvents } ) => {
     
     try {
       const response = await api.post("/events/save-event", payload);
-      console.log("RESP", response.data);
-      
+
       if (response?.data) {
         const data = response.data;
         ShowToast({
@@ -181,7 +149,6 @@ const AddNewEventForm = ( { setSortedEvents } ) => {
     if (opponentTeamId !== teamId) { // Can not play against itself
       setHomeTeamId(teamId);
       setHomeTeamName(name); 
-      console.log(teamId);
     } else {
       ShowToast({
         image: logo,

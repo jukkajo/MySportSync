@@ -10,7 +10,6 @@ const TeamSelect = ({ id, label, selectedTeam, onSelect }) => {
     const fetchTeams = async () => {
       if (query.length < 1) return; // Search only when atleast one chars typed
       const response = await api.get("/teams/get-teams", { params: { search: query } });
-      console.log("RSP", response.data);
       setTeams(response.data || []);
     };
     const delay = setTimeout(fetchTeams, 400); // input debounce

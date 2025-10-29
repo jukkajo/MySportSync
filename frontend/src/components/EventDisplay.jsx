@@ -33,7 +33,6 @@ const EventDisplay = ({ sortedEvents, setSortedEvents }) => {
           params: { limit: 15 },
         });
         
-        console.log("RSP", response.data);
         const payload = Array.isArray(response.data) ? response.data : response.data?.data;
 
 	if (Array.isArray(payload)) {
@@ -48,7 +47,6 @@ const EventDisplay = ({ sortedEvents, setSortedEvents }) => {
           });
         }
       } catch (err) {
-          console.log(err);
           ShowToast({
             image: logo,
             title: "Failed to Fetch Events",
