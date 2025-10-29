@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import api from "../apis/api.js";
 
-const TeamSelect = ({ teams, setTeams, label, selectedTeam, onSelect }) => {
+const TeamSelect = ({ id, label, selectedTeam, onSelect }) => {
+  const [teams, setTeams] = useState([]);
   const [query, setQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
@@ -15,6 +16,12 @@ const TeamSelect = ({ teams, setTeams, label, selectedTeam, onSelect }) => {
     const delay = setTimeout(fetchTeams, 400); // input debounce
     return () => clearTimeout(delay);
   }, [query]);
+  
+  // Autofill selected team back after view change
+  useEffect(() => {
+    if (!selectedTeam) return;
+    setQuery(selectedTeam);
+  }, [selectedTeam]);
 
   // Check if typed value is registered team
   const validateTeam = () => {
@@ -50,7 +57,7 @@ const TeamSelect = ({ teams, setTeams, label, selectedTeam, onSelect }) => {
             <li
               key={team.id}
               onClick={() => {
-                onSelect(team.id);
+                onSelect(team.id, team.team_name);
                 setQuery(team.team_name);
                 setIsOpen(false);
               }}

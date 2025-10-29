@@ -15,13 +15,15 @@ const AddNewEventForm = ( { setSortedEvents } ) => {
 
   const [view, setView] = useState('main'); // 'main' or 'time' 
   
-  const [teams, setTeams] = useState([]);
   const [availableSports, setAvailableSports] = useState([]); 
   const [sport, setSport] = useState("");
   
   const [homeTeamId, setHomeTeamId] = useState(null);
+  const [homeTeamName, setHomeTeamName] = useState("");
+  
   const [opponentTeamId, setOpponentTeamId] = useState("");
-
+  const [opponentTeamName, setOpponentTeamName] = useState("");
+  
   const [venue, setVenue] = useState("");  
   
   const [plannedDuration, setPlannedDuration] = useState(null); // In minutes
@@ -63,18 +65,7 @@ const AddNewEventForm = ( { setSortedEvents } ) => {
   const handleSubmit = async (e) => {
     // Very basic validation for now
     const missingFields = [];
-    
-    if (!homeTeamId || !opponentTeamId) {
-     const issue = returnTeamSelectIssueDesc(homeTeamId, opponentTeamId);
-     ShowToast({
-        image: logo,
-        title: "Invalid Team Selection",
-        subtitle: `${issue} Please select a registered team from the list.`,
-        options: { toastId: "invalidTeamSelection" },
-      });
-      return;
-    }
-    
+
     if (!sport) missingFields.push("Sport");
     if (!date) missingFields.push("Date");
     if (!timezone) missingFields.push("Timezone");
@@ -90,6 +81,17 @@ const AddNewEventForm = ( { setSortedEvents } ) => {
         title: "Missing Required Fields",
         subtitle: `Please fill: ${missingList}.`,
         options: { toastId: "validationError" },
+      });
+      return;
+    }
+
+    if (!homeTeamId || !opponentTeamId) {
+     const issue = returnTeamSelectIssueDesc(homeTeamId, opponentTeamId);
+     ShowToast({
+        image: logo,
+        title: "Invalid Team Selection",
+        subtitle: `${issue} Please select a registered team from the list.`,
+        options: { toastId: "invalidTeamSelection" },
       });
       return;
     }
@@ -157,10 +159,11 @@ const AddNewEventForm = ( { setSortedEvents } ) => {
     
     }
   };
-  
-  const handleHomeTeamSelect = (teamId) => {
+
+  const handleHomeTeamSelect = (teamId, name) => {
     if (opponentTeamId !== teamId) { // Can not play against itself
       setHomeTeamId(teamId);
+      setHomeTeamName(name); 
       console.log(teamId);
     } else {
       ShowToast({
@@ -172,9 +175,10 @@ const AddNewEventForm = ( { setSortedEvents } ) => {
     }
   };
 
-  const handleOpponentTeamSelect = (teamId) => {
+  const handleOpponentTeamSelect = (teamId, name) => {
     if (homeTeamId !== teamId) { // Can not play against itself
       setOpponentTeamId(teamId);
+      setOpponentTeamName(name); 
     } else {
       ShowToast({
         image: logo,
@@ -214,8 +218,8 @@ const AddNewEventForm = ( { setSortedEvents } ) => {
          >
            <h3>Set Details</h3>
            <SportTypeSelect selectedSport={sport} sports={availableSports} onSelect={handleSportTypeSelect} />
-           <TeamSelect teams={teams} setTeams={setTeams} label="Home Team" selectedTeam={homeTeamId} onSelect={handleHomeTeamSelect} />
-           <TeamSelect teams={teams} setTeams={setTeams} label="Opponent Team" selectedTeam={opponentTeamId} onSelect={handleOpponentTeamSelect} />
+           <TeamSelect id={homeTeamId} label="Home Team" selectedTeam={homeTeamName} onSelect={handleHomeTeamSelect} />
+           <TeamSelect id={opponentTeamId} label="Opponent Team" selectedTeam={opponentTeamName} onSelect={handleOpponentTeamSelect} />
            <UniversalTextInput
              label="Venue"
              value={venue}
