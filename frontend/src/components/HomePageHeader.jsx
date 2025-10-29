@@ -10,7 +10,7 @@ const HomePageHeader = () => {
   const tabs = [{name: "Home", id: "home"},
   		{name: "All Events", id: "events"},
 		{name: "All Teams", id: "teams" },
-		{name: "About", id: "about"},
+                {name: "Live", id: "live"},
 		{name: "Register Team", id: "register"},
 		{name: "Log Out", id: "logout"}];
 		

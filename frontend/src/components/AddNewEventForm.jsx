@@ -8,6 +8,7 @@ import SportTypeSelect from "./SportTypeSelect";
 import TeamSelect from "./TeamSelect";
 import ShowToast from "./ShowToast";
 
+import { dateTimeToUTCRelativeToTz } from "../utils/timeUtils";
 import api from "../apis/api.js";
 import logo from "../assets/logo.png";
 
@@ -65,7 +66,6 @@ const AddNewEventForm = ( { setSortedEvents } ) => {
   const handleSubmit = async (e) => {
     // Very basic validation for now
     const missingFields = [];
-
     if (!sport) missingFields.push("Sport");
     if (!date) missingFields.push("Date");
     if (!timezone) missingFields.push("Timezone");
@@ -73,7 +73,6 @@ const AddNewEventForm = ( { setSortedEvents } ) => {
     if (!venue) missingFields.push("Venue");
     if (!description) missingFields.push("Description");
     if (!plannedDuration) missingFields.push("Planned Duration");
-
     if (missingFields.length > 0) {
       const missingList = missingFields.join(", ");
       ShowToast({
@@ -85,6 +84,22 @@ const AddNewEventForm = ( { setSortedEvents } ) => {
       return;
     }
 
+    // --- Timezone relative valid time check: ---
+    // Is start time considered past in event tz?
+    const dateTimeString = `${date}T${time}:00`;
+    const eventStartUTC = dateTimeToUTCRelativeToTz(dateTimeString, timezone); 
+    const timeNowAsUTC = Date.now();
+    if (timeNowAsUTC > eventStartUTC) {
+      ShowToast({
+        image: logo,
+        title: "Invalid Event Time",
+        subtitle: "Please choose non-past time/date.",
+        options: { toastId: "validationError" },
+      });
+      return;
+    }
+    // ------------------------------------------
+    
     if (!homeTeamId || !opponentTeamId) {
      const issue = returnTeamSelectIssueDesc(homeTeamId, opponentTeamId);
      ShowToast({
@@ -131,6 +146,8 @@ const AddNewEventForm = ( { setSortedEvents } ) => {
         setPlannedDuration(null);
         setDescription("");
         setTimezone("Europe/Vienna");
+        setHomeTeamName("");
+        setOpponentTeamName("");
         
         // EventDisplay expects this structure
 	const latestEvent = {

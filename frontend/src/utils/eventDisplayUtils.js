@@ -1,15 +1,20 @@
 export const isLive = (event) => {
-  const timeNow = new Date();
-  const start = new Date(event.event_start);
-  const end = new Date(event.event_end);
-  return start <= timeNow && timeNow <= end;
-};
+  if (!event?.event_start || !event?.event_end) return false;
+  // ms since epoch (UTC)
+  const now = Date.now();
+  // Utc aligned timestamps
+  const start = new Date(event.event_start).getTime();
+  const end = new Date(event.event_end).getTime();
+  // timezone-neutral comparison
+  return start <= now && now <= end;
+}
 
 // Aplies filters and modifies event list
 export const sortEvents = (list, option, setSortedEvents) => {
   console.log("LST:", list);
-  const sorted = [...list];
- 
+  let sorted = [...list];
+  const now = Date.now();
+
   switch (option) {
     // Older
     case "date-asc":
@@ -30,22 +35,21 @@ export const sortEvents = (list, option, setSortedEvents) => {
     // Events that are consired live
     case "date-asc-2":
     
-     // Live 
-     const liveEvents = list.filter(e => {
-       const start = new Date(e.event_start);
-       const end = new Date(e.event_end);
-       return start <= now && now <= end; // started but not finished
-     });
+     // Order: Live -> Upcoming -> Newest past events 
+     const liveEvents = list.filter(e => isLive(e));
+     const upcomingEvents = list.filter(e => new Date(e.event_start).getTime() > now);
+     const pastEvents = list.filter(e => new Date(e.event_end).getTime() < now);
+     sorted = [
+        ...liveEvents.sort((a, b) => new Date(a.event_start) - new Date(b.event_start)),
+        ...upcomingEvents.sort((a, b) => new Date(a.event_start) - new Date(b.event_start)),
+        ...pastEvents.sort((a, b) => new Date(b.event_start) - new Date(a.event_start)) 
+     ];
+     
+     break;
 
-  const upcomingEvents = list.filter(e => new Date(e.event_start) > now);
-
-      break;
-    case "date-asc-3":
-    
     default:
       break;
   }
-
   setSortedEvents(sorted);
 };
 
