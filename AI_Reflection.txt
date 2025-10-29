@@ -6,8 +6,8 @@ AI-tools used: ChatGPT
 Scope of AI Assistance
 
 * Frontend:
-- App-logo. Description: Used to generate logo-placeholder for the app.
-- App-wallpaper. Description: Used to generate wallpaper-placeholder for the app.
+- App-logo: Used to generate logo-placeholder for the app.
+- App-wallpaper: Used to generate wallpaper-placeholder for the app.
 - Tailwind version 4 setup & use: Used to help setup tailwindCSS latest version, and to understand
   important changes, compared to older version.
   
