@@ -11,10 +11,10 @@ This is lighweight web-app to save and display multiple sports events that are h
 
 **Assumptions and Development Decisions:**
 - The app focuses on listing sports events with essential info: real-time updates or live game tracking may be integrated later
-- The current home page represents the view shown after a succesful (future) user login**.
+- The current home page represents the view shown after a succesful (future) user login.
 - Authentication is not yet implemented, but the client and backend structures ate prepared for adding auth later.
-- The project uses a clean, scalable architecture for smooth transition to production (modular backend with clear task-division, component-based frontend).
-- Home page provides a quick overview of live and upcoming events, sided with an easy event creation form, using existing registered teams.
+- The project uses a clean, scalable architecture for smooth transition to production later on (modular backend with clear task-division, component-based frontend).
+- Home page provides a quick overview of live and upcoming events, sided with an easy event creation-form, using existing registered teams.
 - Basic form validation is implemented as a foundation, intended to be expanded later.
 - Dynamic REST-based team search is used instead of a long dropdown for better UX.
 - Events store the timezone in the database to ensure clarity, but no automatic timezone conversion is applied on the UI to avoid issues with VPN and privacy-related location requests.

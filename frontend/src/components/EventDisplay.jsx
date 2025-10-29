@@ -30,7 +30,7 @@ const EventDisplay = ({ sortedEvents, setSortedEvents }) => {
     const fetchEvents = async () => {
       try {
         const response = await api.get("/events/get-events", {
-          params: { limit: 15 },
+          params: { limit: 10 },
         });
         
         const payload = Array.isArray(response.data) ? response.data : response.data?.data;

@@ -1,0 +1,25 @@
+This file is AI-Manifest. It tells how and what AI-tools have been used to support development
+of this software.
+
+AI-tools used: ChatGPT
+
+Scope of AI Assistance
+
+* Frontend:
+- App-logo. Description: Used to generate logo-placeholder for the app.
+- App-wallpaper. Description: Used to generate wallpaper-placeholder for the app.
+- Tailwind version 4 setup & use: Used to help setup tailwindCSS latest version, and to understand
+  important changes, compared to older version.
+  
+* Backend:
+- Database-connection string: Used to provide syntax for canonical postgreSQL-database connection string.
+- Function-"getCurrentAndUpcomingEvents": AI used to provide Correct CASE-syntax for DB-query.
+
+* Database:
+- Not used
+
+What AI did not do
+
+* Did not make architectural decisions.
+* Did not create complete features or components, (not even full functions).
+* Did not deploy or operate services.
