@@ -1,6 +1,8 @@
 # MySportSync
 
-![Screenshot of UI](./ui.png)
+<video src="https://github.com/user-attachments/assets/0ce98ceb-4828-4fec-8ea8-20801265875c" width="600" controls>
+  Your browser does not support the video tag.
+</video>
 
 This is lighweight web-app to save and display multiple sports events that are held between two teams. It supports various sport types, allows adding teams, selecting venues, and scheduling event date and time. Built as a demo for a developer job application. Future improvements may include user authentication, token-protected data transmission, role-based permissions, and UI-wise mobile optimization.
 

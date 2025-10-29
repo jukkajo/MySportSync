@@ -104,7 +104,7 @@ const AddNewEventForm = ( { setSortedEvents } ) => {
           subtitle: "Event saved."
         });
         
-        // Clear form fields
+        // Clear form fields or return to default
         setSport("");
         setHomeTeamId(null);
         setOpponentTeamId(null);
@@ -116,6 +116,7 @@ const AddNewEventForm = ( { setSortedEvents } ) => {
         setTimezone("Europe/Vienna");
         setHomeTeamName("");
         setOpponentTeamName("");
+        setView("main");
         
         // EventDisplay expects this structure
 	const latestEvent = {
