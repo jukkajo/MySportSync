@@ -4,7 +4,7 @@ import fastify from "../fastify.js";
 export async function getSystemSportTypes() {
   const client = await fastify.pg.connect();
   try {
-    const { rows } = await client.query(`SELECT s.id, s.name, t.team FROM sports s;`); 
+    const { rows } = await client.query(`SELECT s.id, s.name FROM sports s;`); 
     return rows;
   } catch (error) {
     throw new Error("Database query failed.");
